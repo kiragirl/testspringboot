@@ -23,4 +23,9 @@ public class GreetingController{
 		model.addAttribute("name", name);
 		return "greeting";
 	}
+	@RequestMapping("/greeting2")
+	public String greeting2(@RequestParam(value="name",required=false,defaultValue="world") String name,Model model) {
+		model.addAttribute("name", name);
+		return "greeting";
+	}
 }
