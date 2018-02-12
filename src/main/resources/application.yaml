@@ -1,0 +1,32 @@
+my:
+   servers:
+       - dev.bar.com
+       - foo.bar.com
+   secret: ${random.value}
+foo:
+    remote-address: 192.168.1.1
+    security:
+        username: foo
+        roles:
+          - USER
+          - ADMIN
+---
+spring:
+  profiles: dev
+foo:
+    remote-address: 192.168.1.1
+    security:
+        username: foodev
+        roles:
+          - USER
+          - ADMIN
+---
+spring:
+  profiles: pro
+foo:
+    remote-address: 192.168.1.1
+    security:
+        username: foopro
+        roles:
+          - USER
+          - ADMIN
