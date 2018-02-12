@@ -5,6 +5,8 @@
 **/
 package test.springboot.hello.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -20,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(2)
 public class MyCommandLineRunner implements CommandLineRunner{
-
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	/**
 	 * @author:liyiming
 	 * @date:2018年2月11日
@@ -30,9 +32,7 @@ public class MyCommandLineRunner implements CommandLineRunner{
 	 */
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("MyCommandLineRunner is running .....");
-		System.out.println(args.toString());
-		System.out.println("MyCommandLineRunner is end of run .....");
+		logger.info("MyCommandLineRunner is running .....");
 	}
 
 }

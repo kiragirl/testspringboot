@@ -5,6 +5,8 @@
  **/
 package test.springboot.hello.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
@@ -22,7 +24,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(3)
 public class MyApplicationRunner implements ApplicationRunner{
-
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	/**
 	 * @author:liyiming
 	 * @date:2018年2月11日
@@ -32,11 +34,10 @@ public class MyApplicationRunner implements ApplicationRunner{
 	 */
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		System.out.println("ApplicationRunner is running .....");
-		System.out.println(args.getOptionNames().toString());
+		logger.info("ApplicationRunner is running .....");
+		/*System.out.println(args.getOptionNames().toString());
 		System.out.println(args.getNonOptionArgs().toString());
-		System.out.println(args.getSourceArgs());
-		System.out.println("ApplicationRunner is end of run .....");
+		System.out.println(args.getSourceArgs());*/
 	}
 
 }
