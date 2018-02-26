@@ -1,7 +1,1 @@
-2018-02-12 14:59:05,486 WARN  [nio-8080-exec-10] t.s.hello.GreetingController.greeting3: this is a test warn log
-2018-02-12 14:59:08,034 WARN  [-nio-8080-exec-8] t.s.hello.GreetingController.greeting3: this is a test warn log
-2018-02-12 15:02:47,276 WARN  [nio-8080-exec-10] t.s.hello.GreetingController.greeting3: this is a test warn log
-2018-02-12 15:02:57,879 WARN  [-nio-8080-exec-6] t.s.hello.GreetingController.greeting3: this is a test warn log
-2018-02-12 15:14:05,465 WARN  [-nio-8080-exec-1] t.s.hello.GreetingController.greeting3: this is a test warn log
-2018-02-12 15:14:07,299 WARN  [-nio-8080-exec-3] t.s.hello.GreetingController.greeting3: this is a test warn log
-2018-02-12 15:37:56,749 WARN  [nio-8080-exec-10] t.s.hello.GreetingController.greeting3: this is a test warn log
+2018-02-26 16:12:59,659 WARN  [-nio-8081-exec-7] t.s.hello.GreetingController.greeting3: this is a test warn log
