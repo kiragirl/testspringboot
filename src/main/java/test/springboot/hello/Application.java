@@ -9,6 +9,7 @@ import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jms.annotation.EnableJms;
 
 /**
  * Title: Application Description: Company:pusense
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.Bean;
  **/
 //same as @Configuration @EnableAutoConfiguration @ComponentScan
 @SpringBootApplication
+@EnableJms
 public class Application{
 
 	public static void main(String[] args) {

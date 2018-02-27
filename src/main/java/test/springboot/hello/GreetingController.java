@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import test.springboot.hello.bean.User;
 import test.springboot.hello.bean.UserBean;
 import test.springboot.hello.config.FooProperties;
+import test.springboot.hello.jms.SendMessage;
 import test.springboot.hello.repository.UserRepository;
+import test.springboot.hello.service.UserService;
+import test.springboot.hello.util.MathUtil;
 
 /**
  * Title: GreetingController Description: Company:pusense
@@ -40,10 +43,13 @@ public class GreetingController{
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
-	
+	@Autowired
+	private MathUtil mathUtil;
+	@Autowired
+	private SendMessage sendMessage;
 	@RequestMapping("/greeting")
 	public String greeting(@RequestParam(value = "name", required = false, defaultValue = "world") String name,
 			Model model) {
@@ -68,16 +74,24 @@ public class GreetingController{
 
 	@RequestMapping("/greeting3")
 	public String greeting3(Model model) {
-		User user = userRepository.findUserById("123");
+		User user = userService.findUser("123");
 		logger.debug(" userRepository.findUserById:{}",user.getUsername());
-		System.out.println("Hello \u001b[1;31mred\u001b[0m world!");
+		/*System.out.println("Hello \u001b[1;31mred\u001b[0m world!");
 		logger.debug("this is a test debug log");
 		logger.info("this is a test info log");
 		logger.warn("this is a test warn log");
-		logger.error("this is a test error log");
+		logger.error("this is a test error log");*/
 		// String name = userBean.getName();
 		String name = properties.getSecurity().getUsername();
 		model.addAttribute("name", name);
+		return "greeting";
+	}
+	
+	@RequestMapping("/greeting4")
+	public String greeting4(Model model) {
+		model.addAttribute("name", mathUtil.computePiDecimal(10));
+		sendMessage.sendMessageByQueue(String.valueOf(mathUtil.computePiDecimal(10)));
+		sendMessage.sendMessageByTopic(String.valueOf(mathUtil.computePiDecimal(10)));
 		return "greeting";
 	}
 }
