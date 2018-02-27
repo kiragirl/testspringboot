@@ -8,6 +8,9 @@ package test.springboot.hello;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +18,16 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import test.springboot.hello.bean.User;
 import test.springboot.hello.bean.UserBean;
+import test.springboot.hello.bean.ValidationBean;
 import test.springboot.hello.config.FooProperties;
 import test.springboot.hello.jms.SendMessage;
 import test.springboot.hello.repository.UserRepository;
@@ -50,6 +58,7 @@ public class GreetingController{
 	private MathUtil mathUtil;
 	@Autowired
 	private SendMessage sendMessage;
+
 	@RequestMapping("/greeting")
 	public String greeting(@RequestParam(value = "name", required = false, defaultValue = "world") String name,
 			Model model) {
@@ -61,13 +70,13 @@ public class GreetingController{
 	public String greeting2(Model model) {
 		// String name = userBean.getName();
 		String name = "";
-		List<Map<String, Object>> list = jdbcTemplate.queryForList("select username from test_user where test_user.id=?",
-				"141111153857816nrtjl");
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(
+				"select username from test_user where test_user.id=?", "141111153857816nrtjl");
 		for (Map<String, Object> map : list) {
 			logger.debug("the user's username is {}", map.get("username"));
 			name = (String) map.get("username");
 		}
-		//name = userBean.getExternalConfigRandomValue();
+		// name = userBean.getExternalConfigRandomValue();
 		model.addAttribute("name", name);
 		return "greeting";
 	}
@@ -75,23 +84,60 @@ public class GreetingController{
 	@RequestMapping("/greeting3")
 	public String greeting3(Model model) {
 		User user = userService.findUser("123");
-		logger.debug(" userRepository.findUserById:{}",user.getUsername());
-		/*System.out.println("Hello \u001b[1;31mred\u001b[0m world!");
-		logger.debug("this is a test debug log");
-		logger.info("this is a test info log");
-		logger.warn("this is a test warn log");
-		logger.error("this is a test error log");*/
+		logger.debug(" userRepository.findUserById:{}", user.getUsername());
+		/*
+		 * System.out.println("Hello \u001b[1;31mred\u001b[0m world!");
+		 * logger.debug("this is a test debug log");
+		 * logger.info("this is a test info log");
+		 * logger.warn("this is a test warn log");
+		 * logger.error("this is a test error log");
+		 */
 		// String name = userBean.getName();
 		String name = properties.getSecurity().getUsername();
 		model.addAttribute("name", name);
 		return "greeting";
 	}
-	
+
 	@RequestMapping("/greeting4")
 	public String greeting4(Model model) {
 		model.addAttribute("name", mathUtil.computePiDecimal(10));
-		sendMessage.sendMessageByQueue(String.valueOf(mathUtil.computePiDecimal(10)));
-		sendMessage.sendMessageByTopic(String.valueOf(mathUtil.computePiDecimal(10)));
+		try {
+			sendMessage.sendMessageByQueue(String.valueOf(mathUtil.computePiDecimal(10)));
+			sendMessage.sendMessageByTopic(String.valueOf(mathUtil.computePiDecimal(11)));
+		} catch (ConstraintViolationException e) {
+			logger.debug(e.getMessage());
+			// e.printStackTrace();
+		}
+		mathUtil.testValidatedSize("weqweqweq");
 		return "greeting";
 	}
+	/**
+	 * @Valid 只在此层（@Controller）校验有用 userService中没用
+	 * @author:liyiming
+	 * @date:2018年2月27日
+	 * @Description:
+	 * @param user
+	 * @param bindingResult
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/greeting5")
+	@ResponseBody
+	public String greeting5(@RequestBody @Valid ValidationBean user, BindingResult bindingResult,Model model) {
+		//处理@Valid异常
+		if (bindingResult.hasErrors()) {
+			for(FieldError fieldError :bindingResult.getFieldErrors()){
+				logger.debug(fieldError.getDefaultMessage());
+			};
+			return "error";
+        }
+		userService.saveUser(user);
+		return user.getUsername();
+	}
+	
+	@RequestMapping("/valid")
+	public String valid(Model model) {
+		return "valid";
+	}
+	
 }
