@@ -22,4 +22,6 @@ public interface UserRepository extends Repository<User, String>{
 	Page<User> findAll(Pageable pageable);
 
 	User findUserById(String id);
+	
+	User save(User user); 
 }
