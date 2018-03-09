@@ -82,19 +82,19 @@ public class GreetingController{
 	}
 
 	@RequestMapping("/greeting3")
-	public String greeting3(Model model) {
-		User user = userService.findUser("123");
+	public String greeting3(@RequestParam(value = "name", required = false, defaultValue = "kira") String name,Model model) {
+		User user = new User();
+		user.setUsername(name);
+		user.setPassword(name);
+		user = userService.saveUser(user);
+		user = userService.findUser(user.getId());
 		logger.debug(" userRepository.findUserById:{}", user.getUsername());
 		/*
 		 * System.out.println("Hello \u001b[1;31mred\u001b[0m world!");
-		 * logger.debug("this is a test debug log");
-		 * logger.info("this is a test info log");
-		 * logger.warn("this is a test warn log");
-		 * logger.error("this is a test error log");
 		 */
 		// String name = userBean.getName();
-		String name = properties.getSecurity().getUsername();
-		model.addAttribute("name", name);
+		String username = properties.getSecurity().getUsername();
+		model.addAttribute("name", username);
 		return "greeting";
 	}
 

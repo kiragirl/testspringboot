@@ -10,9 +10,11 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -29,8 +31,10 @@ public class User implements Serializable{
 	 */
 	private static final long serialVersionUID = 2621515615943111318L;
 	@Id
-	@GeneratedValue
-	@NotEmpty(message = "id不能为空")
+	//使用数据库自增列
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(generator = "snowFlakeId")
+	@GenericGenerator(name = "snowFlakeId", strategy = "test.springboot.hello.util.SnowflakeId")
 	private String id;
 	
 	@Column(nullable = false)

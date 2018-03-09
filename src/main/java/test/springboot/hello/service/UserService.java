@@ -49,4 +49,8 @@ public class UserService{
 		logger.debug("user has been saved .....");
 		return user;
 	}
+	
+	public User saveUser(User user){
+		return userRepository.save(user);
+	}
 }
