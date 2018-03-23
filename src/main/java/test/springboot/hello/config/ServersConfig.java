@@ -17,7 +17,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date ：2018年2月12日
  **/
 @ConfigurationProperties(prefix="my")
-public class Config{
+public class ServersConfig{
 
 	private List<String> servers = new ArrayList<String>();
 
